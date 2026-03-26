@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System</title>
+    <script src="script/aframe.min.js"></script>
+    <script>
+        // Custom component to make text follow planets without rotating with them
+        AFRAME.registerComponent('follow-planet', {
+            schema: {
+                target: { type: 'selector' },
+                offset: { type: 'vec3' }
+            },
+            tick: function () {
+                if (!this.data.target) return;
+                var targetPos = new THREE.Vector3();
+                this.data.target.object3D.getWorldPosition(targetPos);
+                this.el.object3D.position.copy(targetPos).add(this.data.offset);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <a-scene>
+        <!-- Assets -->
+        <a-assets>
+            <img id="sun" src="texture/2k_sun.jpg">
+            <img id="mercury" src="texture/2k_mercury.jpg">
+            <img id="venus" src="texture/2k_venus_surface.jpg">
+            <img id="earth" src="texture/2k_earth_daymap.jpg">
+            <img id="moon" src="texture/2k_moon.jpg">
+            <img id="mars" src="texture/2k_mars.jpg">
+            <img id="jupiter" src="texture/2k_jupiter.jpg">
+            <img id="saturn" src="texture/2k_saturn.jpg">
+            <img id="saturn-ring" src="texture/2k_saturn_ring_alpha.png">
+            <img id="uranus" src="texture/2k_uranus.jpg">
+            <img id="neptune" src="texture/2k_neptune.jpg">
+            <img id="stars" src="texture/2k_stars_milky_way.jpg">
+        </a-assets>
+
+        <!-- Environment / Sky -->
+        <a-sky src="#stars"></a-sky>
+
+        <!-- Camera configured to get an oblique overview just like the reference image -->
+        <!-- Center of planets is roughly X=35. Look down slightly. -->
+        <a-entity position="35 55 25" rotation="-65 0 0">
+            <a-camera fov="80"></a-camera>
+        </a-entity>
+
+        <!-- Lighting: Sun as point light, plus some ambient light so we can see other sides -->
+        <a-light type="ambient" color="#444"></a-light>
+        <a-light type="point" color="#FFF" position="0 0 0" intensity="1.5"></a-light>
+
+        <!-- Sun -->
+        <a-sphere id="sun-planet" src="#sun" radius="10" position="0 0 0" material="shader: flat;"></a-sphere>
+
+        <!-- Orbits (Visual Paths) -->
+        <a-ring radius-inner="13.95" radius-outer="14.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="19.95" radius-outer="20.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="26.95" radius-outer="27.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="32.95" radius-outer="33.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="44.95" radius-outer="45.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="57.95" radius-outer="58.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="69.95" radius-outer="70.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="80.95" radius-outer="81.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+        <a-ring radius-inner="89.95" radius-outer="90.05" rotation="-90 0 0" color="#fff" opacity="0.2"></a-ring>
+
+        <!-- PLANETS AND ORBITS -->
+
+        <!-- Mercury -->
+        <a-entity animation="property: rotation; from: 0 -25 0; to: 0 335 0; loop: true; dur: 4000; easing: linear">
+            <a-sphere id="mercury-planet" src="#mercury" radius="0.5" position="14 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 2000; easing: linear"></a-sphere>
+        </a-entity>
+
+        <!-- Venus -->
+        <a-entity animation="property: rotation; from: 0 35 0; to: 0 395 0; loop: true; dur: 7000; easing: linear">
+            <a-sphere id="venus-planet" src="#venus" radius="1.1" position="20 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000; easing: linear"></a-sphere>
+        </a-entity>
+
+        <!-- Earth and Moon -->
+        <a-entity animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+            <a-entity id="earth-system" position="27 0 0">
+                <a-sphere id="earth-planet" src="#earth" radius="1.3" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000; easing: linear"></a-sphere>
+                <!-- Moon Orbit -->
+                <a-entity animation="property: rotation; from: 0 90 0; to: 0 450 0; loop: true; dur: 2000; easing: linear">
+                    <a-sphere id="moon-planet" src="#moon" radius="0.3" position="2.2 0 0"></a-sphere>
+                </a-entity>
+            </a-entity>
+        </a-entity>
+
+        <!-- Mars -->
+        <a-entity animation="property: rotation; from: 0 -25 0; to: 0 335 0; loop: true; dur: 18000; easing: linear">
+            <a-sphere id="mars-planet" src="#mars" radius="0.8" position="33 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000; easing: linear"></a-sphere>
+        </a-entity>
+
+        <!-- Jupiter -->
+        <a-entity animation="property: rotation; from: 0 5 0; to: 0 365 0; loop: true; dur: 40000; easing: linear">
+            <a-sphere id="jupiter-planet" src="#jupiter" radius="4" position="45 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"></a-sphere>
+        </a-entity>
+
+        <!-- Saturn -->
+        <a-entity animation="property: rotation; from: 0 25 0; to: 0 385 0; loop: true; dur: 80000; easing: linear">
+            <a-entity id="saturn-system" position="58 0 0">
+                <a-sphere id="saturn-planet" src="#saturn" radius="3" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"></a-sphere>
+                <!-- Tilted Rings -->
+                <a-cylinder src="#saturn-ring" radius="6" height="0.1" material="side: double; transparent: true; opacity: 0.9;" rotation="20 -20 0"></a-cylinder>
+            </a-entity>
+        </a-entity>
+
+        <!-- Uranus -->
+        <a-entity animation="property: rotation; from: 0 -15 0; to: 0 345 0; loop: true; dur: 150000; easing: linear">
+            <a-sphere id="uranus-planet" src="#uranus" radius="2" position="70 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 12000; easing: linear"></a-sphere>
+        </a-entity>
+
+        <!-- Neptune -->
+        <a-entity animation="property: rotation; from: 0 15 0; to: 0 375 0; loop: true; dur: 250000; easing: linear">
+            <a-sphere id="neptune-planet" src="#neptune" radius="1.8" position="81 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 12000; easing: linear"></a-sphere>
+        </a-entity>
+
+        <!-- Pluto (using moon texture as fallback but making it tiny and brownish) -->
+        <a-entity animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 400000; easing: linear">
+            <a-sphere id="pluto-planet" src="#moon" color="#D2B48C" radius="0.4" position="90 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear"></a-sphere>
+        </a-entity>
+
+        <!-- TEXT LABELS (Hovering to look exactly like the figure) -->
+        <!-- All text elements are rotated to perfectly face the camera (-65 0 0) -->
+        <a-text value="SUN" position="7 0 7" rotation="-65 0 0" width="35" align="center" color="#FFF"></a-text>
+        
+        <a-text value="MERCURY" follow-planet="target: #mercury-planet; offset: 0 0 2" rotation="-65 0 0" width="15" align="center" color="#FFF"></a-text>
+        <a-text value="VENUS" follow-planet="target: #venus-planet; offset: 0 0 -3" rotation="-65 0 0" width="15" align="center" color="#FFF"></a-text>
+        <a-text value="EARTH" follow-planet="target: #earth-planet; offset: 0 0 3" rotation="-65 0 0" width="15" align="center" color="#FFF"></a-text>
+        <a-text value="MOON" follow-planet="target: #moon-planet; offset: 0 0 -1.5" rotation="-65 0 0" width="10" align="center" color="#FFF"></a-text>
+        <a-text value="MARS" follow-planet="target: #mars-planet; offset: 0 0 2.5" rotation="-65 0 0" width="15" align="center" color="#FFF"></a-text>
+        <a-text value="JUPITER" follow-planet="target: #jupiter-planet; offset: 0 0 6" rotation="-65 0 0" width="20" align="center" color="#FFF"></a-text>
+        <a-text value="SATURN" follow-planet="target: #saturn-system; offset: 0 0 7" rotation="-65 0 0" width="20" align="center" color="#FFF"></a-text>
+        <a-text value="URANUS" follow-planet="target: #uranus-planet; offset: 0 0 4.5" rotation="-65 0 0" width="15" align="center" color="#FFF"></a-text>
+        <a-text value="NEPTUNE" follow-planet="target: #neptune-planet; offset: 0 0 -4.5" rotation="-65 0 0" width="15" align="center" color="#FFF"></a-text>
+        <a-text value="PLUTO" follow-planet="target: #pluto-planet; offset: 0 0 -2" rotation="-65 0 0" width="15" align="center" color="#FFF"></a-text>
+
+    </a-scene>
+</body>
+
+</html>
